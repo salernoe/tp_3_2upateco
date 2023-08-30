@@ -137,3 +137,226 @@ def init_app():
 
         return jsonify({}), 204
     
+    
+    
+     #2.1. Obtener un producto
+     #GET /products/<int:product_id>  
+    
+    products = [
+    {
+        "product_id": 10,
+        "product_name": "Surly Straggler - 2016",
+        "brand": {
+            "brand_id": 8,
+            "brand_name": "Surly"
+        },
+        "category": {
+            "category_id": 4,
+            "category_name": "Cyclocross Bicycles"
+        },
+        "model_year": 2016,
+        "list_price": 1549.00
+    },
+    # Add more products here
+]
+    
+    @app.route('/products/<int:product_id>', methods=['GET'])
+    def get_product(product_id):
+        product = None
+        for p in products:
+            if p["product_id"] == product_id:
+                product = p
+                break
+        
+        if product is None:
+            return jsonify({'error': 'Product not found'}), 404
+        
+        return jsonify(product), 200
+    
+    
+      
+    
+     #2.2. Obtener un listado de productos
+     #GET /products
+    
+    
+    
+        products = [
+        {
+            "product_id": 21,
+            "product_name": "Electra Cruiser 1 (24-Inch) - 2016",
+            "brand": {
+                "brand_id": 1,
+                "brand_name": "Electra"
+            },
+            "category": {
+                "category_id": 1,
+                "category_name": "Children Bicycles"
+            },
+            "model_year": 2016,
+            "list_price": "269.99"
+        },
+        {
+            "product_id": 22,
+            "product_name": "Electra Girl's Hawaii 1 (16-inch) - 2015/2016",
+            "brand": {
+                "brand_id": 1,
+                "brand_name": "Electra"
+            },
+            "category": {
+                "category_id": 1,
+                "category_name": "Children Bicycles"
+            },
+            "model_year": 2016,
+            "list_price": "269.99"
+        },
+        # Add more products here
+    ]
+
+    @app.route('/products', methods=['GET'])
+    def get_products():
+        brand_id = request.args.get('brand_id')
+        category_id = request.args.get('category_id')
+        
+        filtered_products = []
+        for p in products:
+            if (brand_id is None or p["brand"]["brand_id"] == int(brand_id)) and \
+            (category_id is None or p["category"]["category_id"] == int(category_id)):
+                filtered_products.append(p)
+        
+        response_data = {
+            "products": filtered_products,
+            "total": len(filtered_products)
+        }
+        
+        return jsonify(response_data), 200
+    
+    
+     #2.3. Registrar un producto
+     #POST /products
+    
+        products = []
+
+    @app.route('/products', methods=['POST'])
+    def create_product():
+        data = request.json
+        
+        new_product = {
+            "product_id": len(products) + 1,
+            "product_name": data["product_name"],
+            "brand": {
+                "brand_id": data["brand_id"],
+                "brand_name": ""  # You can fetch brand name from database based on brand_id
+            },
+            "category": {
+                "category_id": data["category_id"],
+                "category_name": ""  # You can fetch category name from database based on category_id
+            },
+            "model_year": data["model_year"],
+            "list_price": data["list_price"]
+        }
+        
+        products.append(new_product)
+        
+        return jsonify({}), 201
+
+    @app.route('/products/<int:product_id>', methods=['PUT'])
+    def update_product(product_id):
+        data = request.json
+        
+        product_to_update = None
+        for p in products:
+            if p["product_id"] == product_id:
+                product_to_update = p
+                break
+        
+        if product_to_update is None:
+            return jsonify({"error": "Product not found"}), 404
+        
+        if "product_name" in data:
+            product_to_update["product_name"] = data["product_name"]
+        if "brand_id" in data:
+            product_to_update["brand"]["brand_id"] = data["brand_id"]
+        if "category_id" in data:
+            product_to_update["category"]["category_id"] = data["category_id"]
+        if "model_year" in data:
+            product_to_update["model_year"] = data["model_year"]
+        if "list_price" in data:
+            product_to_update["list_price"] = data["list_price"]
+        
+        return jsonify({}), 200
+    
+    #2.4. Modificar un producto
+    #PUT /products/<int:product_id>
+    
+        products = [
+        {
+            "product_id": 1,
+            "product_name": "Trek Hiperfly XLR8 - 2019",
+            "brand": {
+                "brand_id": 9,
+                "brand_name": "Trek"
+            },
+            "category": {
+                "category_id": 4,
+                "category_name": "Mountain Bicycles"
+            },
+            "model_year": 2019,
+            "list_price": 994.99
+        },
+        # ... other products
+    ]
+
+    @app.route('/products/<int:product_id>', methods=['PUT'])
+    def update_product(product_id):
+        data = request.json
+        
+        product_to_update = None
+        for p in products:
+            if p["product_id"] == product_id:
+                product_to_update = p
+                break
+        
+        if product_to_update is None:
+            return jsonify({"error": "Product not found"}), 404
+        
+        if "product_name" in data:
+            product_to_update["product_name"] = data["product_name"]
+        if "brand_id" in data:
+            product_to_update["brand"]["brand_id"] = data["brand_id"]
+        if "category_id" in data:
+            product_to_update["category"]["category_id"] = data["category_id"]
+        if "model_year" in data:
+            product_to_update["model_year"] = data["model_year"]
+        if "list_price" in data:
+            product_to_update["list_price"] = data["list_price"]
+        
+        return jsonify({}), 200
+    
+    
+    #1.5. Eliminar un producto
+    #DELETE /products/<int:product_id>
+    
+        products = [
+        {
+            "product_id": 1,
+            "product_name": "Trek Hiperfly XLR8 - 2019",
+            "brand": {
+                "brand_id": 9,
+                "brand_name": "Trek"
+            },
+            "category": {
+                "category_id": 4,
+                "category_name": "Mountain Bicycles"
+            },
+            "model_year": 2019,
+            "list_price": 994.99
+        },
+        # ... other products
+    ]
+
+    @app.route('/products/<int:product_id>', methods=['DELETE'])
+    def delete_product(product_id):
+        global products
+        products = [p for p in products if p["product_id"] != product_id]
+        return jsonify({}), 204
