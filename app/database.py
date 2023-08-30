@@ -1,5 +1,4 @@
 import mysql.connector
-
 class DatabaseConnection:
     _connection = None
     @classmethod
@@ -26,6 +25,3 @@ class DatabaseConnection:
         cursor.execute(query, params)
         cls._connection.commit()
         return cursor()
-    
-    
-    
