@@ -1,4 +1,5 @@
 import mysql.connector
+
 class DatabaseConnection:
     _connection = None
     @classmethod
@@ -6,11 +7,25 @@ class DatabaseConnection:
         if cls._connection is None:
             cls._connection = mysql.connector.connect(
             host='127.0.0.1',
-            user='my_user',
+            user='juan',
             port = "3306",
-            password='my_pass',
-            database='my_database'
+            password='Upateco12345678@',
+            database='sales'
             )
         return cls._connection
-    qwerqewrqw
+    
+    @classmethod
+    def fetch_one(cls, query, params=None):
+        cursor = cls.get_connection().cursor()
+        cursor.execute(query, params)
+        return cursor.fetchone()
+    
+    @classmethod
+    def execute_query(cls, query, params=None):
+        cursor = cls.get_connection().cursor()
+        cursor.execute(query, params)
+        cls._connection.commit()
+        return cursor()
+    
+    
     
