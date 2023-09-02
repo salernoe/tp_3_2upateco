@@ -246,11 +246,11 @@ def init_app():
             "product_name": data["product_name"],
             "brand": {
                 "brand_id": data["brand_id"],
-                "brand_name": ""  # You can fetch brand name from database based on brand_id
+                "brand_name": ""  
             },
             "category": {
                 "category_id": data["category_id"],
-                "category_name": ""  # You can fetch category name from database based on category_id
+                "category_name": ""  
             },
             "model_year": data["model_year"],
             "list_price": data["list_price"]
