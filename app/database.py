@@ -9,7 +9,7 @@ class DatabaseConnection:
             user='juan',
             port = "3306",
             password='Upateco12345678@',
-            database='sales'
+            database='BikeStores'
             )
         return cls._connection
     
