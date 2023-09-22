@@ -304,10 +304,10 @@ def init_app():
             "model_year": 2019,
             "list_price": 994.99
         },
-        # ... other products
+        
     ]
 
-    @app.route('/products/<int:product_id>', methods=['PUT'])
+    @app.route('/products1/<int:product_id>', methods=['PUT'])
     def update_product(product_id):
         data = request.json
         
