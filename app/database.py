@@ -14,6 +14,14 @@ class DatabaseConnection:
         return cls._connection
 
     @classmethod
+    def execute_query(cls, query, params=None):
+        cursor = cls.get_connection().cursor()
+        cursor.execute(query, params)
+        cls._connection.commit()
+        return cursor
+
+    
+    @classmethod
     def fetch_one(cls, query, params=None):
         cursor = cls.get_connection().cursor()
         cursor.execute(query, params)
