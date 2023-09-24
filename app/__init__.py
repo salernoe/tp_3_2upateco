@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from config import Config
 from app.database import DatabaseConnection
+import mysql.connector
 
 def init_app():
     app = Flask(__name__, static_folder=Config.STATIC_FOLDER, template_folder=Config.TEMPLATE_FOLDER)
@@ -69,9 +70,9 @@ def init_app():
     # PUT /customers/<int:customer_id>
     
     @app.route('/customers_put/<int:customer_id>', methods=['PUT'])
-    def update_actor(customer_id):
+    def update_customers(customer_id):
         query = "UPDATE sales.customers SET first_name = %s, last_name = %s, last_update = %s, phone = %s, street = %s, city = %s, state = %s, zip_code = %s WHERE customer_id = %s"
-        params = request.args.get('first_name', ''), request.args.get('last_name', ''), request.args.get('last_update', ''), request.args.get('phone', ''), request.args.get('street', ''), request.args.get('city', ''), request.args.get('state', ''), request.args.get('zip_code', ''), customer_id
+        params = request.args.get('first_name', ''), request.args.get('last_name', ''), request.args.get('last_update', ''), request.args.get('phone', ''), request.args.get('street', ''), request.args.get
         DatabaseConnection.execute_query(query, params)
         return {"msg": "Datos del cliente actualizados con éxito"}, 200
         
@@ -84,7 +85,7 @@ def init_app():
     @app.route('/customers_delete/<int:customer_id>', methods=['DELETE'])
     def delete_customer(customer_id):       
         query = "DELETE FROM sales.customers WHERE customer_id = %s"
-        params = customer_id
+        params = (customer_id,)
         DatabaseConnection.execute_query(query, params)
         return {"msg": "Cliente eliminado con éxito"}, 200
     
@@ -160,6 +161,18 @@ def init_app():
         params = product_id
         DatabaseConnection.execute_query(sql, params)
         return {"msg": "Producto eliminado con éxito"}, 200
+    def execute_query(query, params=None):
+        try:
+            cursor = DatabaseConnection.get_cursor()
+            if params:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+            DatabaseConnection.commit()
+        except mysql.connector.Error as err:
+            print("Error executing query:", err)
+            DatabaseConnection.rollback()
+        finally:
+            cursor.close()
     
-
     return app
