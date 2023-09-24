@@ -161,18 +161,6 @@ def init_app():
         params = product_id
         DatabaseConnection.execute_query(sql, params)
         return {"msg": "Producto eliminado con éxito"}, 200
-    def execute_query(query, params=None):
-        try:
-            cursor = DatabaseConnection.get_cursor()
-            if params:
-                cursor.execute(query, params)
-            else:
-                cursor.execute(query)
-            DatabaseConnection.commit()
-        except mysql.connector.Error as err:
-            print("Error executing query:", err)
-            DatabaseConnection.rollback()
-        finally:
-            cursor.close()
+    
     
     return app
